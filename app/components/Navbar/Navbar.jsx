@@ -61,7 +61,7 @@
 //   );
 // }
 
-'use client';
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -81,17 +81,13 @@ export default function Navbar() {
     <nav className="w-full bg-slate-50 border-b">
       <div className="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
 
-        {/* Brand */}
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-teal-600">
-            FreshKart
-          </span>
+          <span className="text-2xl font-bold text-teal-600">FreshKart</span>
           <span className="text-sm text-gray-500 hidden sm:block">
             Daily groceries, delivered fresh
           </span>
         </div>
 
-        {/* 🔍 Search */}
         <div className="hidden md:flex flex-1 mx-10">
           <input
             type="text"
@@ -108,20 +104,12 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Links */}
         <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
-          <Link href="/categories" className="hover:text-teal-600">
-            Categories
-          </Link>
-          <Link href="/offers" className="hover:text-teal-600">
-            Offers
-          </Link>
-          <Link href="/orders" className="hover:text-teal-600">
-            My Orders
-          </Link>
+          <Link href="/categories" className="hover:text-teal-600">Categories</Link>
+          <Link href="/offers" className="hover:text-teal-600">Offers</Link>
+          <Link href="/orders" className="hover:text-teal-600">My Orders</Link>
         </div>
 
-        {/* Right */}
         <div className="flex items-center gap-3">
           <Link href="/login">
             <button className="border border-teal-600 text-teal-600 px-4 py-1.5 rounded-md text-sm hover:bg-teal-50">
@@ -141,6 +129,7 @@ export default function Navbar() {
     </nav>
   );
 }
+
 
 
 

@@ -1,5 +1,5 @@
 
-'use client';
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -10,7 +10,6 @@ export default function AllProducts() {
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("");
 
-  // 🔍 GET SEARCH QUERY FROM URL
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
@@ -32,13 +31,11 @@ export default function AllProducts() {
     { id: 15, name: "Avocado", price: 800, rating: 4.1, category: "Fruit", image: "/15.png" },
   ];
 
-  // 🔹 CATEGORY FILTER
   let filtered =
     category === "All"
       ? [...products]
       : products.filter((p) => p.category === category);
 
-  // 🔍 SEARCH FILTER (NAME + CATEGORY)
   if (searchQuery) {
     filtered = filtered.filter(
       (p) =>
@@ -47,7 +44,6 @@ export default function AllProducts() {
     );
   }
 
-  // 🔃 SORT
   if (sort === "priceLow") filtered.sort((a, b) => a.price - b.price);
   if (sort === "priceHigh") filtered.sort((a, b) => b.price - a.price);
   if (sort === "rating") filtered.sort((a, b) => b.rating - a.rating);
@@ -58,7 +54,6 @@ export default function AllProducts() {
         All Products
       </h1>
 
-      {/* FILTER + SORT */}
       <div style={styles.controls}>
         <div style={styles.tabs}>
           {["All", "Grocery", "Spices", "Snacks", "Dairy", "Fruit"].map((cat) => (
@@ -83,7 +78,6 @@ export default function AllProducts() {
         </select>
       </div>
 
-      {/* PRODUCT GRID */}
       <div style={styles.grid}>
         {filtered.length === 0 && (
           <p style={{ gridColumn: "1/-1", textAlign: "center" }}>
@@ -162,6 +156,7 @@ const styles = {
     cursor: "pointer",
   },
 };
+
 
 
 
