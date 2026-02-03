@@ -1,13 +1,18 @@
 
 'use client';
-import Link from "next/link";
 
+import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function AllProducts() {
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("");
+
+  // 🔍 GET SEARCH QUERY FROM URL
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
   const products = [
     { id: 1, name: "Oil", price: 1500, rating: 4.3, category: "Grocery", image: "/1.png" },
@@ -27,13 +32,22 @@ export default function AllProducts() {
     { id: 15, name: "Avocado", price: 800, rating: 4.1, category: "Fruit", image: "/15.png" },
   ];
 
-  // FILTER
+  // 🔹 CATEGORY FILTER
   let filtered =
     category === "All"
       ? [...products]
       : products.filter((p) => p.category === category);
 
-  // SORT
+  // 🔍 SEARCH FILTER (NAME + CATEGORY)
+  if (searchQuery) {
+    filtered = filtered.filter(
+      (p) =>
+        p.name.toLowerCase().includes(searchQuery) ||
+        p.category.toLowerCase().includes(searchQuery)
+    );
+  }
+
+  // 🔃 SORT
   if (sort === "priceLow") filtered.sort((a, b) => a.price - b.price);
   if (sort === "priceHigh") filtered.sort((a, b) => b.price - a.price);
   if (sort === "rating") filtered.sort((a, b) => b.rating - a.rating);
@@ -46,7 +60,6 @@ export default function AllProducts() {
 
       {/* FILTER + SORT */}
       <div style={styles.controls}>
-        {/* CATEGORY TABS */}
         <div style={styles.tabs}>
           {["All", "Grocery", "Spices", "Snacks", "Dairy", "Fruit"].map((cat) => (
             <button
@@ -62,7 +75,6 @@ export default function AllProducts() {
           ))}
         </div>
 
-        {/* SORT */}
         <select onChange={(e) => setSort(e.target.value)}>
           <option value="">Sort By</option>
           <option value="priceLow">Price: Low → High</option>
@@ -72,19 +84,13 @@ export default function AllProducts() {
       </div>
 
       {/* PRODUCT GRID */}
-      {/* <div style={styles.grid}>
-        {filtered.map((product) => (
-          <div key={product.id} style={styles.card}>
-            <Image src={product.image} alt={product.name} width={180} height={180} />
-            <h3>{product.name}</h3>
-            <p><b>Tk {product.price}</b></p>
-            <p style={{ color: "gold" }}>⭐ {product.rating}</p>
-            <button style={styles.button}>Quick Add</button>
-          </div>
-        ))}
-      </div> */}
-
       <div style={styles.grid}>
+        {filtered.length === 0 && (
+          <p style={{ gridColumn: "1/-1", textAlign: "center" }}>
+            No products found
+          </p>
+        )}
+
         {filtered.map((product) => (
           <Link
             key={product.id}
@@ -92,12 +98,7 @@ export default function AllProducts() {
             style={{ textDecoration: "none", color: "inherit" }}
           >
             <div style={styles.card}>
-              <Image
-                src={product.image}
-                alt={product.name}
-                width={180}
-                height={180}
-              />
+              <Image src={product.image} alt={product.name} width={180} height={180} />
               <h3>{product.name}</h3>
               <p><b>Tk {product.price}</b></p>
               <p style={{ color: "gold" }}>⭐ {product.rating}</p>
@@ -106,7 +107,6 @@ export default function AllProducts() {
           </Link>
         ))}
       </div>
-
     </main>
   );
 }
@@ -131,7 +131,6 @@ const styles = {
     backgroundColor: "#fff",
     cursor: "pointer",
     fontSize: "14px",
-    transition: "0.3s",
   },
   activeTab: {
     backgroundColor: "#ff8c32",
@@ -163,6 +162,7 @@ const styles = {
     cursor: "pointer",
   },
 };
+
 
 
 
