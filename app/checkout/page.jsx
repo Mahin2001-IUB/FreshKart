@@ -17,6 +17,7 @@ export default function CheckoutPage() {
     phone: "",
     city: "",
     address: "",
+    paymentMethod: "Cash on Delivery",
   });
 
   const subtotal = cart.reduce(
@@ -34,19 +35,29 @@ export default function CheckoutPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!customer.name || !customer.phone || !customer.city || !customer.address) {
+    if (
+      !customer.name ||
+      !customer.phone ||
+      !customer.city ||
+      !customer.address
+    ) {
       alert("Please fill all required fields");
       return;
     }
 
     const newOrder = {
       id: "ORD-" + Date.now(),
-      customer,
+      customer: {
+        name: customer.name,
+        phone: customer.phone,
+        city: customer.city,
+        address: customer.address,
+      },
       items: cart,
       subtotal: subtotal.toFixed(2),
       vat: vat.toFixed(2),
       total: total.toFixed(2),
-      paymentMethod: "Cash on Delivery",
+      paymentMethod: customer.paymentMethod,
       date: new Date().toLocaleString(),
     };
 
@@ -118,6 +129,18 @@ export default function CheckoutPage() {
                 onChange={handleChange}
                 style={styles.textarea}
               />
+
+              {/* ✅ PAYMENT METHOD */}
+              <select
+                name="paymentMethod"
+                value={customer.paymentMethod}
+                onChange={handleChange}
+                style={styles.input}
+              >
+                <option value="Cash on Delivery">Cash on Delivery</option>
+                <option value="bKash">bKash</option>
+                <option value="Nagad">Nagad</option>
+              </select>
 
               <button type="submit" style={styles.placeOrderBtn}>
                 Place Order
@@ -236,6 +259,7 @@ const styles = {
     margin: "16px 0",
   },
 };
+
 
 
 
