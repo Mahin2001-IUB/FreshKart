@@ -109,7 +109,7 @@ const products = [
     name: "Milk",
     price: 140,
     rating: 4.5,
-    image: "/13.png",
+    image: "/20.png",
     description: "Fresh dairy milk.",
     details: ["Rich calcium", "Farm fresh", "Daily nutrition"],
   },
