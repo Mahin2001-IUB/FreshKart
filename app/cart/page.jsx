@@ -1,12 +1,15 @@
+
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useShopCart } from "@/app/store/ShopCartStore";
 import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Navbar/Navbar";
 
 export default function CartPage() {
   const { cart, removeFromCart } = useShopCart();
+  const router = useRouter();
 
   const totalPrice = cart.reduce(
     (sum, item) => sum + item.price * item.qty,
@@ -15,49 +18,61 @@ export default function CartPage() {
 
   if (cart.length === 0) {
     return (
-      <main style={{ maxWidth: "900px", margin: "40px auto", padding: "20px" }}>
-        <h1>Your Cart</h1>
-        <p style={{ marginTop: "20px" }}>Your cart is empty.</p>
-        <Link href="/">
-          <button style={styles.backBtn}>Go Shopping</button>
-        </Link>
-      </main>
+      <>
+        <Navbar />
+        <main style={{ maxWidth: "900px", margin: "40px auto", padding: "20px" }}>
+          <h1>Your Cart</h1>
+          <p style={{ marginTop: "20px" }}>Your cart is empty.</p>
+          <Link href="/">
+            <button style={styles.backBtn}>Go Shopping</button>
+          </Link>
+        </main>
+        <Footer />
+      </>
     );
   }
 
   return (
-   <>
-   <Navbar></Navbar>
-    <main style={{ maxWidth: "900px", margin: "40px auto", padding: "20px" }}>
-      <h1>Your Cart</h1>
+    <>
+      <Navbar />
 
-      <div style={{ marginTop: "30px" }}>
-        {cart.map((item) => (
-          <div key={item.id} style={styles.item}>
-            <div>
-              <h3>{item.name}</h3>
-              <p>Tk {item.price}</p>
-              <p>Qty: {item.qty}</p>
+      <main style={{ maxWidth: "900px", margin: "40px auto", padding: "20px" }}>
+        <h1>Your Cart</h1>
+
+        <div style={{ marginTop: "30px" }}>
+          {cart.map((item) => (
+            <div key={item.id} style={styles.item}>
+              <div>
+                <h3>{item.name}</h3>
+                <p>Tk {item.price}</p>
+                <p>Qty: {item.qty}</p>
+              </div>
+
+              <button
+                onClick={() => removeFromCart(item.id)}
+                style={styles.removeBtn}
+              >
+                Remove
+              </button>
             </div>
+          ))}
+        </div>
 
-            <button
-              onClick={() => removeFromCart(item.id)}
-              style={styles.removeBtn}
-            >
-              Remove
-            </button>
-          </div>
-        ))}
-      </div>
+        <hr style={{ margin: "30px 0" }} />
 
-      <hr style={{ margin: "30px 0" }} />
+        <h2>Total: Tk {totalPrice}</h2>
 
-      <h2>Total: Tk {totalPrice}</h2>
+        {/* ✅ CHECKOUT BUTTON */}
+        <button
+          style={styles.checkoutBtn}
+          onClick={() => router.push("/checkout")}
+        >
+          Checkout
+        </button>
+      </main>
 
-      <button style={styles.checkoutBtn}>Checkout</button>
-    </main>
-   <Footer></Footer>
-   </>
+      <Footer />
+    </>
   );
 }
 
