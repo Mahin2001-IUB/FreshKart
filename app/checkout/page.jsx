@@ -1,8 +1,9 @@
+
 "use client";
 
 import { useState } from "react";
-import { useShopCart } from "@/app/store/ShopCartStore";
 import { useRouter } from "next/navigation";
+import { useShopCart } from "@/app/store/ShopCartStore";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 
@@ -13,8 +14,8 @@ export default function CheckoutPage() {
   const [customer, setCustomer] = useState({
     name: "",
     phone: "",
-    address: "",
     city: "",
+    address: "",
   });
 
   const subtotal = cart.reduce(
@@ -22,9 +23,9 @@ export default function CheckoutPage() {
     0
   );
 
-  const VAT_RATE = 0.05; // 5%
-  const vatAmount = subtotal * VAT_RATE;
-  const total = subtotal + vatAmount;
+  const VAT_RATE = 0.05;
+  const vat = subtotal * VAT_RATE;
+  const total = subtotal + vat;
 
   const handleChange = (e) => {
     setCustomer({ ...customer, [e.target.name]: e.target.value });
@@ -38,144 +39,194 @@ export default function CheckoutPage() {
       return;
     }
 
-    // 🔒 No backend yet — simulate order
     alert("✅ Order placed successfully!");
-
     clearCart();
     router.push("/");
   };
 
   if (cart.length === 0) {
-    return <p style={{ textAlign: "center", marginTop: "40px" }}>Cart is empty</p>;
+    return (
+      <>
+        <Navbar />
+        <p style={{ textAlign: "center", marginTop: "60px" }}>
+          Your cart is empty.
+        </p>
+        <Footer />
+      </>
+    );
   }
 
   return (
-<>
-<Navbar></Navbar>
-    <main style={{ maxWidth: "1000px", margin: "40px auto", padding: "20px" }}>
-      <h1>Checkout</h1>
+    <>
+      <Navbar />
 
-      {/* ORDER SUMMARY */}
-      <section style={styles.section}>
-        <h2>Order Summary</h2>
+      <main style={styles.page}>
+        <h1 style={styles.title}>Checkout</h1>
 
-        {cart.map((item) => (
-          <div key={item.id} style={styles.item}>
-            <span>{item.name} × {item.qty}</span>
-            <span>Tk {item.price * item.qty}</span>
+        <div style={styles.layout}>
+          {/* LEFT: CUSTOMER FORM */}
+          <div style={styles.card}>
+            <h2 style={styles.cardTitle}>Customer Details</h2>
+
+            <form onSubmit={handleSubmit} style={styles.form}>
+              <input
+                name="name"
+                placeholder="Full Name *"
+                value={customer.name}
+                onChange={handleChange}
+                style={styles.input}
+              />
+
+              <input
+                name="phone"
+                placeholder="Phone Number *"
+                value={customer.phone}
+                onChange={handleChange}
+                style={styles.input}
+              />
+
+              <input
+                name="city"
+                placeholder="City"
+                value={customer.city}
+                onChange={handleChange}
+                style={styles.input}
+              />
+
+              <textarea
+                name="address"
+                placeholder="Full Address *"
+                value={customer.address}
+                onChange={handleChange}
+                style={styles.textarea}
+              />
+
+              <button type="submit" style={styles.placeOrderBtn}>
+                Place Order
+              </button>
+            </form>
           </div>
-        ))}
 
-        <div style={styles.line} />
+          {/* RIGHT: ORDER SUMMARY */}
+          <div style={styles.card}>
+            <h2 style={styles.cardTitle}>Order Summary</h2>
 
-        <div style={styles.item}>
-          <strong>Subtotal</strong>
-          <strong>Tk {subtotal}</strong>
+            {cart.map((item) => (
+              <div key={item.id} style={styles.row}>
+                <span>
+                  {item.name} × {item.qty}
+                </span>
+                <span>Tk {item.price * item.qty}</span>
+              </div>
+            ))}
+
+            <hr style={styles.divider} />
+
+            <div style={styles.row}>
+              <span>Subtotal</span>
+              <span>Tk {subtotal}</span>
+            </div>
+
+            <div style={styles.row}>
+              <span>VAT (5%)</span>
+              <span>Tk {vat.toFixed(2)}</span>
+            </div>
+
+            <div style={styles.totalRow}>
+              <strong>Total</strong>
+              <strong>Tk {total.toFixed(2)}</strong>
+            </div>
+          </div>
         </div>
+      </main>
 
-        <div style={styles.item}>
-          <span>VAT (5%)</span>
-          <span>Tk {vatAmount.toFixed(2)}</span>
-        </div>
-
-        <div style={styles.item}>
-          <strong>Total</strong>
-          <strong>Tk {total.toFixed(2)}</strong>
-        </div>
-      </section>
-
-      {/* CUSTOMER FORM */}
-      <section style={styles.section}>
-        <h2>Customer Details</h2>
-
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <input
-            name="name"
-            placeholder="Full Name *"
-            value={customer.name}
-            onChange={handleChange}
-            style={styles.input}
-          />
-
-          <input
-            name="phone"
-            placeholder="Phone Number *"
-            value={customer.phone}
-            onChange={handleChange}
-            style={styles.input}
-          />
-
-          <input
-            name="city"
-            placeholder="City"
-            value={customer.city}
-            onChange={handleChange}
-            style={styles.input}
-          />
-
-          <textarea
-            name="address"
-            placeholder="Full Address *"
-            value={customer.address}
-            onChange={handleChange}
-            style={styles.textarea}
-          />
-
-          <button type="submit" style={styles.placeOrderBtn}>
-            Place Order
-          </button>
-        </form>
-      </section>
-    </main>
-    <Footer></Footer>
-</>
+      <Footer />
+    </>
   );
-
 }
 
 /* ================= STYLES ================= */
 
 const styles = {
-  section: {
-    marginTop: "30px",
+  page: {
+    maxWidth: "1200px",
+    margin: "40px auto",
     padding: "20px",
-    border: "1px solid #ddd",
-    borderRadius: "10px",
   },
-  item: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginBottom: "10px",
+
+  title: {
+    textAlign: "center",
+    marginBottom: "30px",
+    fontSize: "28px",
   },
-  line: {
-    height: "1px",
-    background: "#ddd",
-    margin: "15px 0",
+
+  layout: {
+    display: "grid",
+    gridTemplateColumns: "1.2fr 1fr",
+    gap: "30px",
   },
+
+  card: {
+    background: "#fff",
+    borderRadius: "14px",
+    padding: "24px",
+    border: "1px solid #e5e7eb",
+    boxShadow: "0 6px 18px rgba(0,0,0,0.05)",
+  },
+
+  cardTitle: {
+    fontSize: "20px",
+    marginBottom: "20px",
+  },
+
   form: {
     display: "flex",
     flexDirection: "column",
-    gap: "12px",
+    gap: "14px",
   },
+
   input: {
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
+    padding: "12px",
+    borderRadius: "8px",
+    border: "1px solid #d1d5db",
+    fontSize: "14px",
   },
+
   textarea: {
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-    minHeight: "80px",
+    padding: "12px",
+    borderRadius: "8px",
+    border: "1px solid #d1d5db",
+    minHeight: "90px",
+    fontSize: "14px",
   },
+
   placeOrderBtn: {
     marginTop: "10px",
-    padding: "12px",
+    padding: "14px",
     background: "#16a34a",
     color: "#fff",
     border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
+    borderRadius: "10px",
     fontSize: "16px",
+    cursor: "pointer",
+  },
+
+  row: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "10px",
+    fontSize: "15px",
+  },
+
+  totalRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: "14px",
+    fontSize: "18px",
+  },
+
+  divider: {
+    margin: "16px 0",
   },
 };
+

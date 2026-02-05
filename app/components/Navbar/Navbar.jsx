@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState } from "react";
@@ -8,15 +7,14 @@ import Link from "next/link";
 import { signOut } from "firebase/auth";
 import { auth } from "@/app/lib/firebase";
 import { useAuth } from "@/app/context/AuthContext";
-import { useShopCart } from "@/app/store/ShopCartStore"; // ✅ CART STORE
+import { useShopCart } from "@/app/store/ShopCartStore";
 
 export default function Navbar() {
   const [search, setSearch] = useState("");
   const router = useRouter();
   const { user, loading } = useAuth();
-  const { cart } = useShopCart(); // ✅ GET CART
+  const { cart } = useShopCart();
 
-  // ✅ TOTAL CART ITEMS
   const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
 
   const handleSearch = () => {
@@ -75,6 +73,18 @@ export default function Navbar() {
                 👋 Hi, <b>{user.email.split("@")[0]}</b>
               </span>
 
+              {/* ✅ CART ONLY AFTER LOGIN */}
+              <Link href="/cart">
+                <button className="relative bg-teal-600 text-white px-4 py-1.5 rounded-md text-sm hover:bg-teal-700">
+                  Cart
+                  {totalItems > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-gray-800 text-white text-xs px-1.5 rounded-full">
+                      {totalItems}
+                    </span>
+                  )}
+                </button>
+              </Link>
+
               <button
                 onClick={handleLogout}
                 className="border border-gray-300 px-3 py-1.5 rounded-md text-sm hover:bg-gray-100"
@@ -89,26 +99,13 @@ export default function Navbar() {
               </button>
             </Link>
           )}
-
-          {/* 🛒 CART BUTTON */}
-          <Link href="/cart">
-            <button className="relative bg-teal-600 text-white px-4 py-1.5 rounded-md text-sm hover:bg-teal-700">
-              Cart
-
-              {/* ✅ REAL CART COUNT */}
-              {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-gray-800 text-white text-xs px-1.5 rounded-full">
-                  {totalItems}
-                </span>
-              )}
-            </button>
-          </Link>
         </div>
 
       </div>
     </nav>
   );
 }
+
 
 
 
