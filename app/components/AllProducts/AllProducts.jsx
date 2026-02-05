@@ -7,9 +7,11 @@ import Image from "next/image";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
+import { useShopCart } from "@/app/store/ShopCartStore"; // ✅ CART STORE
 
 export default function AllProducts() {
   const { user, loading } = useAuth();
+  const { addToCart } = useShopCart(); // ✅ CART ACTION
 
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("");
@@ -138,8 +140,14 @@ export default function AllProducts() {
                   <button style={styles.viewBtn}>View</button>
                 </Link>
 
+                {/* ✅ REAL ADD TO CART */}
                 {user && (
-                  <button style={styles.cartBtn}>Add to Cart</button>
+                  <button
+                    style={styles.cartBtn}
+                    onClick={() => addToCart(product)}
+                  >
+                    Add to Cart
+                  </button>
                 )}
               </div>
             </div>
@@ -268,6 +276,7 @@ const styles = {
     cursor: "pointer",
   },
 };
+
 
 
 
