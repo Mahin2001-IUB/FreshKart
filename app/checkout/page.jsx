@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState } from "react";
@@ -23,8 +24,7 @@ export default function CheckoutPage() {
     0
   );
 
-  const VAT_RATE = 0.05;
-  const vat = subtotal * VAT_RATE;
+  const vat = subtotal * 0.05;
   const total = subtotal + vat;
 
   const handleChange = (e) => {
@@ -34,14 +34,28 @@ export default function CheckoutPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!customer.name || !customer.phone || !customer.address) {
+    if (!customer.name || !customer.phone || !customer.city || !customer.address) {
       alert("Please fill all required fields");
       return;
     }
 
-    alert("✅ Order placed successfully!");
+    const newOrder = {
+      id: "ORD-" + Date.now(),
+      customer,
+      items: cart,
+      subtotal: subtotal.toFixed(2),
+      vat: vat.toFixed(2),
+      total: total.toFixed(2),
+      paymentMethod: "Cash on Delivery",
+      date: new Date().toLocaleString(),
+    };
+
+    const orders = JSON.parse(localStorage.getItem("orders")) || [];
+    orders.unshift(newOrder);
+    localStorage.setItem("orders", JSON.stringify(orders));
+
     clearCart();
-    router.push("/");
+    router.push("/orders");
   };
 
   if (cart.length === 0) {
@@ -64,7 +78,7 @@ export default function CheckoutPage() {
         <h1 style={styles.title}>Checkout</h1>
 
         <div style={styles.layout}>
-          {/* LEFT: CUSTOMER FORM */}
+          {/* CUSTOMER DETAILS */}
           <div style={styles.card}>
             <h2 style={styles.cardTitle}>Customer Details</h2>
 
@@ -85,13 +99,17 @@ export default function CheckoutPage() {
                 style={styles.input}
               />
 
-              <input
+              <select
                 name="city"
-                placeholder="City"
                 value={customer.city}
                 onChange={handleChange}
                 style={styles.input}
-              />
+              >
+                <option value="">Select City *</option>
+                <option value="Dhaka">Dhaka</option>
+                <option value="Barishal">Barishal</option>
+                <option value="Khulna">Khulna</option>
+              </select>
 
               <textarea
                 name="address"
@@ -107,7 +125,7 @@ export default function CheckoutPage() {
             </form>
           </div>
 
-          {/* RIGHT: ORDER SUMMARY */}
+          {/* ORDER SUMMARY */}
           <div style={styles.card}>
             <h2 style={styles.cardTitle}>Order Summary</h2>
 
@@ -124,7 +142,7 @@ export default function CheckoutPage() {
 
             <div style={styles.row}>
               <span>Subtotal</span>
-              <span>Tk {subtotal}</span>
+              <span>Tk {subtotal.toFixed(2)}</span>
             </div>
 
             <div style={styles.row}>
@@ -153,19 +171,16 @@ const styles = {
     margin: "40px auto",
     padding: "20px",
   },
-
   title: {
     textAlign: "center",
     marginBottom: "30px",
     fontSize: "28px",
   },
-
   layout: {
     display: "grid",
     gridTemplateColumns: "1.2fr 1fr",
     gap: "30px",
   },
-
   card: {
     background: "#fff",
     borderRadius: "14px",
@@ -173,25 +188,21 @@ const styles = {
     border: "1px solid #e5e7eb",
     boxShadow: "0 6px 18px rgba(0,0,0,0.05)",
   },
-
   cardTitle: {
     fontSize: "20px",
     marginBottom: "20px",
   },
-
   form: {
     display: "flex",
     flexDirection: "column",
     gap: "14px",
   },
-
   input: {
     padding: "12px",
     borderRadius: "8px",
     border: "1px solid #d1d5db",
     fontSize: "14px",
   },
-
   textarea: {
     padding: "12px",
     borderRadius: "8px",
@@ -199,7 +210,6 @@ const styles = {
     minHeight: "90px",
     fontSize: "14px",
   },
-
   placeOrderBtn: {
     marginTop: "10px",
     padding: "14px",
@@ -210,23 +220,23 @@ const styles = {
     fontSize: "16px",
     cursor: "pointer",
   },
-
   row: {
     display: "flex",
     justifyContent: "space-between",
     marginBottom: "10px",
     fontSize: "15px",
   },
-
   totalRow: {
     display: "flex",
     justifyContent: "space-between",
     marginTop: "14px",
     fontSize: "18px",
   },
-
   divider: {
     margin: "16px 0",
   },
 };
+
+
+
 
