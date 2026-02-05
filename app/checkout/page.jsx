@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useShopCart } from "@/app/store/ShopCartStore";
 import { useRouter } from "next/navigation";
+import Navbar from "../components/Navbar/Navbar";
+import Footer from "../components/Footer/Footer";
 
 export default function CheckoutPage() {
   const { cart, clearCart } = useShopCart();
@@ -48,6 +50,8 @@ export default function CheckoutPage() {
   }
 
   return (
+<>
+<Navbar></Navbar>
     <main style={{ maxWidth: "1000px", margin: "40px auto", padding: "20px" }}>
       <h1>Checkout</h1>
 
@@ -123,7 +127,10 @@ export default function CheckoutPage() {
         </form>
       </section>
     </main>
+    <Footer></Footer>
+</>
   );
+
 }
 
 /* ================= STYLES ================= */
