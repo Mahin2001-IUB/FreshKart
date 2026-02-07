@@ -7,7 +7,7 @@ export default function ProductShopVideo() {
   const router = useRouter();
 
   return (
-    <section className="py-24 bg-gradient-to- from-white to-gray-100">
+    <section className="py-24 bg-gradient-to- from-white to-gray-400">
       <div className="max-w-6xl mx-auto px-6">
 
         {/* HEADER */}
