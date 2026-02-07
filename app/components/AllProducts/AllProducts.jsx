@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import Link from "next/link";
@@ -7,11 +5,11 @@ import Image from "next/image";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
-import { useShopCart } from "@/app/store/ShopCartStore"; // ✅ CART STORE
+import { useShopCart } from "@/app/store/ShopCartStore";
 
 export default function AllProducts() {
-  const { user, loading } = useAuth();
-  const { addToCart } = useShopCart(); // ✅ CART ACTION
+  const { user } = useAuth();
+  const { addToCart } = useShopCart();
 
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("");
@@ -60,8 +58,6 @@ export default function AllProducts() {
   if (sort === "priceLow") filtered.sort((a, b) => a.price - b.price);
   if (sort === "priceHigh") filtered.sort((a, b) => b.price - a.price);
   if (sort === "rating") filtered.sort((a, b) => b.rating - a.rating);
-
-  if (loading) return null;
 
   return (
     <main style={{ padding: "40px", maxWidth: "1400px", margin: "0 auto" }}>
@@ -140,7 +136,6 @@ export default function AllProducts() {
                   <button style={styles.viewBtn}>View</button>
                 </Link>
 
-                {/* ✅ REAL ADD TO CART */}
                 {user && (
                   <button
                     style={styles.cartBtn}
@@ -218,6 +213,8 @@ const styles = {
   cardWrapper: {
     transition: "transform 0.2s ease",
   },
+
+  /* 🔥 FIX IS HERE */
   card: {
     width: "230px",
     minHeight: "380px",
@@ -226,11 +223,13 @@ const styles = {
     padding: "15px",
     textAlign: "center",
     backgroundColor: "#fff",
+    color: "#111", // ✅ FIX: prevent dark-mode fade
     boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
   },
+
   imageBox: {
     width: "180px",
     height: "180px",
@@ -266,6 +265,7 @@ const styles = {
     border: "1px solid #ddd",
     background: "#fff",
     cursor: "pointer",
+    color: "#111",
   },
   cartBtn: {
     padding: "8px 14px",
@@ -276,18 +276,3 @@ const styles = {
     cursor: "pointer",
   },
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

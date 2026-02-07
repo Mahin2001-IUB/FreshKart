@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* =====================
+   GLOBAL THEME (LIGHT ONLY)
+   ===================== */
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -7,41 +11,39 @@
   --muted: #f3f4f6;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Disable system dark mode completely */
+html {
+  color-scheme: light;
 }
 
-/* 🌙 Dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --muted: #1f2933;
-  }
-}
+/* =====================
+   BASE STYLES
+   ===================== */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: #ffffff;        /* force white everywhere */
+  color: #171717;             /* dark readable text */
   font-family: Arial, Helvetica, sans-serif;
   scroll-behavior: smooth;
 }
 
-/* 🟢 Product card hover animation */
+/* =====================
+   PRODUCT CARD EFFECTS
+   ===================== */
+
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
-/* 🟢 Product image zoom on hover */
 .card:hover img {
   transform: scale(1.05);
 }
 
-/* 🟢 Smooth transitions everywhere */
+/* =====================
+   GLOBAL TRANSITIONS
+   ===================== */
+
 button,
 a,
 img,
@@ -49,12 +51,14 @@ img,
   transition: all 0.25s ease;
 }
 
-/* 🟢 Button active click effect */
 button:active {
   transform: scale(0.97);
 }
 
-/* 🟢 Scrollbar (optional nice look) */
+/* =====================
+   SCROLLBAR STYLING
+   ===================== */
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -68,10 +72,11 @@ button:active {
   border-radius: 10px;
 }
 
-/* 🟢 Selection color */
+/* =====================
+   TEXT SELECTION
+   ===================== */
+
 ::selection {
   background: var(--primary);
   color: white;
 }
-
-

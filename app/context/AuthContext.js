@@ -19,12 +19,12 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
 
   return (
     <AuthContext.Provider value={{ user, loading }}>
-      {!loading && children}
+      {children} {/* ✅ ALWAYS render */}
     </AuthContext.Provider>
   );
 }
@@ -32,6 +32,7 @@ export function AuthProvider({ children }) {
 export function useAuth() {
   return useContext(AuthContext);
 }
+
 
 
 
