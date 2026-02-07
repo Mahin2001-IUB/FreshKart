@@ -36,7 +36,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/app/context/AuthContext";
 import { ShopCartProvider } from "@/app/store/ShopCartStore";
-import BackButton from "@/app/components/BackButton/BackButton"; // <-- add this
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -61,12 +60,7 @@ export default function RootLayout({ children }) {
       >
         <AuthProvider>
           <ShopCartProvider>
-
-            {/* Global Back Button */}
-            <BackButton />
-
             {children}
-
           </ShopCartProvider>
         </AuthProvider>
       </body>
