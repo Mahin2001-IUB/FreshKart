@@ -1,3 +1,4 @@
+
 export default function DeliveryImage() {
   return (
     <section style={styles.wrapper}>
@@ -24,7 +25,7 @@ export default function DeliveryImage() {
         {/* Image */}
         <div style={styles.imageBox}>
           <img
-            src="/222.png"
+            src="/pic2.png"
             alt="Delivery illustration"
             style={styles.image}
           />
